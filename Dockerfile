@@ -1,23 +1,12 @@
-FROM python:3
+FROM python:3.9
 
-# Install required system packages (distutils and build tools)
-RUN apt-get update && apt-get install -y \
-    python3-distutils \
-    build-essential \
-    python3-dev
+WORKDIR /app/backend
 
-# Install Django 3.2
-RUN pip install django==3.2
+COPY requirements.txt /app/backend
+RUN pip install -r requirements.txt
 
-# Copy your project files
-COPY . .
+COPY . /app/backend
 
-# Run migrations
-RUN python manage.py migrate
-
-# Expose port 8000
 EXPOSE 8000
 
-# Start the Django development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
+CMD python /app/backend/manage.py runserver 0.0.0.0:8000
